@@ -1,14 +1,22 @@
 import React from 'react';
 // import './App.css';
+import { HashRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Labs from './Labs';
+import Kanbas from './Kanbas';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Welcome to Web Dev</h1>
-      <h3>Pranav Raj Sowrirajan Balaji</h3>
-      <Labs />
-    </div>
+    <HashRouter>
+      <div>
+        <Routes>
+          <Route path="/" element={<Navigate to="Labs" />} />
+          <Route path="/Labs/*" element={<Labs />} />
+          <Route path="/Kanbas/*" element={<Kanbas />} />
+
+        </Routes>
+      </div>
+    </HashRouter>
+    
   );
 }
 
