@@ -41,6 +41,11 @@ export default function TOC() {
           My GitHub Link - Assignment -1 a1 Branch
         </a>
       </li>
+      <li className="nav-item">
+        <a id="wd-k" href="https://github.com/Pranav2501/kanbas-react-web-app/tree/a2" className="nav-link">
+          My GitHub Link - Assignment -2 a2 Branch
+        </a>
+      </li>
     </ul>
   );
 }
