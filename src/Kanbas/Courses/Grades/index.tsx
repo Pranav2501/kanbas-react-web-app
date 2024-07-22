@@ -1,106 +1,96 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaFileImport, FaFileExport, FaFilter, FaSearch, FaCog } from 'react-icons/fa';
+import React from "react";
+import {BsFillGearFill, BsFunnel} from "react-icons/bs";
+import {BiImport} from "react-icons/bi";
+import {LiaFileImportSolid} from "react-icons/lia";
+import {assignments, enrollments, grades, users} from "../../Database"
+import {useParams} from "react-router";
 
 export default function Grades() {
+    const {cid} = useParams();
+
+    const student_ids = enrollments.filter((enrollment) => enrollment.course === cid);
+
+    const students = student_ids.map((student_id) => users.find((user) => user._id === student_id.user));
+
+    const assignments_list = assignments.filter((assignment) => assignment.course === cid);
+
+    const grades_list = students.map((student) => {
+        const student_grades = assignments_list.map((assignment) => {
+            const grade = grades.find((grade) => grade.assignment === assignment._id && grade.student === student?._id);
+            return grade ? grade.grade : "N/A"
+        });
+        return {
+            ...student,
+            grades: student_grades
+        }
+    });
+
     return (
-        <div className="container mt-5">
-            <div className="d-flex justify-content-end mb-3">
-                <button className="btn btn-secondary me-2">
-                    <FaFileImport className="me-2" /> Import
-                </button>
-                <div className="dropdown me-2">
-                    <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        <FaFileExport className="me-2" /> Export
-                    </button>
-                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a className="dropdown-item" href="#">Action 1</a></li>
-                        <li><a className="dropdown-item" href="#">Action 2</a></li>
-                        <li><a className="dropdown-item" href="#">Action 3</a></li>
-                    </ul>
+        <div className="container">
+            <button className="btn btn-secondary float-end">
+                <BsFillGearFill className="fs-5"/>
+            </button>
+            <button className="btn btn-secondary float-end mx-2 dropdown-toggle">
+                <BiImport className="me-2 fs-5"/>
+                Export
+            </button>
+            <button className="btn btn-secondary float-end">
+                <LiaFileImportSolid className="me-2 fs-5"/>
+                Import
+            </button>
+            <br/>
+            <div className="row mt-4">
+                <div className="col">
+                    <label htmlFor="wd-student-names" className="form-label"><b>Student Names</b></label>
+                    <select id="wd-student-names" className="form-select">
+                        <option selected>Search Students</option>
+                    </select>
                 </div>
-                <button className="btn btn-secondary">
-                    <FaCog />
-                </button>
-            </div>
-            <div className="row mb-3">
-                <div className="col-md-6">
-                    <label htmlFor="student-search" className="form-label">Student Names</label>
-                    <div className="input-group">
-                        <span className="input-group-text"><FaSearch /></span>
-                        <input type="text" id="student-search" className="form-control" placeholder="Search Students" />
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <label htmlFor="assignment-search" className="form-label">Assignment Names</label>
-                    <div className="input-group">
-                        <span className="input-group-text"><FaSearch /></span>
-                        <input type="text" id="assignment-search" className="form-control" placeholder="Search Assignments" />
-                    </div>
+                <div className="col">
+                    <label htmlFor="wd-assignment-names" className="form-label"><b>Assignment Names</b></label>
+                    <select id="wd-assignment-names" className="form-select">
+                        <option selected>Search Assignments</option>
+                    </select>
                 </div>
             </div>
-            <div className="d-flex justify-content-start mb-3">
-                <button className="btn btn-secondary">
-                    <FaFilter className="me-2" /> Apply Filters
+            <div className="row my-3 row-cols-auto">
+                <button className="btn btn-secondary ms-2">
+                    <BsFunnel className="me-2"/>
+                    Apply Filters
                 </button>
             </div>
-            <div className="table-responsive">
-                <table className="table table-striped table-bordered">
-                    <thead>
+            <div className="row my-3">
+                <div className="table-responsive">
+                    <table className="table table-striped table-bordered align-middle">
+                        <thead>
                         <tr>
-                            <th>Student Name</th>
-                            <th>A1 SETUP<br />Out of 100</th>
-                            <th>A2 HTML<br />Out of 100</th>
-                            <th>A3 CSS<br />Out of 100</th>
-                            <th>A4 BOOTSTRAP<br />Out of 100</th>
+                            <th scope="col" className="fs-6 fw-normal" style={{width: "20%"}}>Student Name</th>
+                            {
+                                assignments_list && assignments_list.map((assignment) => (
+                                    <th scope="col" className="fs-6 fw-normal text-center" style={{width: "20%"}}>
+                                        {assignment.title}<br/>
+                                        Out of {assignment.points}
+                                    </th>
+                                ))
+                            }
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className='text-danger'>Jane Adams</td>
-                            <td>100%</td>
-                            <td>96.67%</td>
-                            <td>92.18%</td>
-                            <td>66.22%</td>
-                        </tr>
-                        <tr>
-                            <td className='text-danger'>Christina Allen</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                        </tr>
-                        <tr>
-                            <td className='text-danger'>Sameen Ansari</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                        </tr>
-                        <tr>
-                            <td className='text-danger'>Han Bao</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                            <td>
-                                <input type="text" className="form-control" defaultValue="88.03" />
-                            </td>
-                            <td>98.99%</td>
-                        </tr>
-                        <tr>
-                            <td className='text-danger'>Mahi Sai Srinivas Bobbili</td>
-                            <td>100%</td>
-                            <td>96.67%</td>
-                            <td>98.37%</td>
-                            <td>100%</td>
-                        </tr>
-                        <tr>
-                            <td className='text-danger'>Siran Cao</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                            <td>100%</td>
-                        </tr>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {
+                            grades_list && grades_list.map((student) => (
+                                <tr>
+                                    <th scope="row" className="text-danger">{student.firstName + " " + student.lastName}</th>
+                                    {
+                                        student.grades && student.grades.map((grade) => (
+                                            <td className="text-center">{grade}</td>
+                                        ))
+                                    }
+                                </tr>
+                            ))
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     );
