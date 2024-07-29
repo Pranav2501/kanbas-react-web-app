@@ -1,42 +1,42 @@
+// import { courses } from "../Database";
 import CoursesNavigation from "./Navigation";
-import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import Modules from "./Modules";
 import Home from "./Home";
-import Assignments from "./Assigments";
-import AssignmentEditor from "./Assigments/Editor";
+import {Route, Routes, useParams, useLocation} from "react-router";
+import Assignments from "./Assigments"
 import Grades from "./Grades";
-import { FaAlignJustify } from "react-icons/fa";
-import { courses } from "../Database";
+import {FaAlignJustify} from "react-icons/fa";
+import AssignmentsEditor from "./Assigments/AssignmentsEditor";
+import AssignmentEditor from "./Assigments/AssignmentEditor";
 
+export default function Courses({courses}: { courses: any[]; }) {
+    const {cid} = useParams();
+    // const course = courses.find((course) => course._id === cid);
+    const {pathname} = useLocation();
+    const course = courses.find((course) => course._id === cid);
 
-export default function Courses() {
-  const { cid } = useParams();
-  const course = courses.find((course) => course._id === cid);
-  const { pathname } = useLocation();
-
-  return (
-    <div id="wd-courses" style={{ display: 'flex', flexDirection: 'column' }}>
-      <h2 className="text-danger">
-        <FaAlignJustify className="me-3 fs-4 mb-1" />
-        {course && course.name} &gt; {pathname.split("/")[4]}
-      </h2>
-      <hr />
-      <div style={{ display: 'flex' }}>
-        <div style={{ marginRight: '1rem' }}>
-          <CoursesNavigation />
+    return (
+        <div id="wd-courses">
+            <h2 className="text-danger">
+                <FaAlignJustify className="me-4 fs-4 mb-1"/>
+                {course && course.name} &gt; {pathname.split("/")[4]}
+            </h2>
+            <hr/>
+            <div className="d-flex">
+                <div className="d-none d-md-block">
+                    <CoursesNavigation/>
+                </div>
+                <div className="flex-fill">
+                    <Routes>
+                        <Route path="Home" element={<Home/>}/>
+                        <Route path="Modules" element={<Modules/>}/>
+                        <Route path="Assignments" element={<Assignments/>}/>
+                        <Route path="Assignments/add" element={<AssignmentEditor/>}/>
+                        <Route path="Assignments/:id" element={<AssignmentsEditor/>}/>
+                        <Route path="Grades" element={<Grades/>}/>
+                    </Routes>
+                </div>
+            </div>
         </div>
-        <div style={{ flex: 1 }}>
-          <Routes>
-            <Route path="/" element={<Navigate to="Home" />} />
-            <Route path="Home" element={<Home />} />
-            <Route path="Modules" element={<Modules />} />
-            <Route path="Assignments" element={<Assignments />} />
-            <Route path="Assignments/:id" element={<AssignmentEditor />} />
-            <Route path="Grades" element={<Grades />} /> 
-
-
-          </Routes>
-        </div>
-      </div>
-    </div>
-  );}
+    )
+}
