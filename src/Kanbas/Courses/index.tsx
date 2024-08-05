@@ -3,11 +3,11 @@ import CoursesNavigation from "./Navigation";
 import Modules from "./Modules";
 import Home from "./Home";
 import {Route, Routes, useParams, useLocation} from "react-router";
-import Assignments from "./Assigments"
+import Assignments from "./Assignments"
 import Grades from "./Grades";
 import {FaAlignJustify} from "react-icons/fa";
-import AssignmentsEditor from "./Assigments/AssignmentsEditor";
-import AssignmentEditor from "./Assigments/AssignmentEditor";
+import AssignmentsEditor from "./Assignments/AssignmentsEditor";
+import AssignmentEditor from "./Assignments/AssignmentEditor";
 
 export default function Courses({courses}: { courses: any[]; }) {
     const {cid} = useParams();
