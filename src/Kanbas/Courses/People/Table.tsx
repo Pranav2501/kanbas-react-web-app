@@ -66,7 +66,7 @@ export default function PeopleTable() {
                     className="form-select float-start w-25">
                 <option value="">All Roles</option>
                 <option value="STUDENT">Students</option>
-                <option value="TA">Assistants</option>
+                <option value="TA">Assistant</option>
                 <option value="FACULTY">Faculty</option>
             </select>
 
