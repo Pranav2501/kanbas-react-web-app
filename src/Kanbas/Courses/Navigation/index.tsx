@@ -1,27 +1,24 @@
 import React from "react";
-import { Link, useParams, useLocation } from "react-router-dom";
 import "./index.css";
+import {useLocation, useParams} from "react-router";
+import {Link} from "react-router-dom";
 
-const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
 
 export default function CoursesNavigation() {
-  const { cid } = useParams();
-  const { pathname } = useLocation();
+    const {pathname} = useLocation();
+    const { cid } = useParams();
+    const active = 'active';
+    const inactive = 'text-danger';
+    const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades","People"];
 
-  return (
-    <div id="wd-courses-navigation" className="list-group fs-5 rounded-0">
-      {links.map((link) => {
-        const isActive = pathname.includes(link);
-        return (
-          <Link
-            key={link}
-            to={`/Kanbas/Courses/${cid}/${link}`}
-            className={`list-group-item border border-0 ${isActive ? "active" : "text-danger bg-white"}`}
-          >
-            {link}
-          </Link>
-        );
-      })}
-    </div>
-  );
+    return (
+        <div id="wd-courses-navigation" className="list-group fs-5 rounded-0">
+            {links.map((link) => (
+                <Link key={link} to={`/Kanbas/Courses/${cid}/${link}`}
+                      className={`list-group-item border border-0 ${pathname.includes(link) ? active : inactive}`}>
+                    {link}
+                </Link>
+            ))}
+        </div>
+    );
 }
