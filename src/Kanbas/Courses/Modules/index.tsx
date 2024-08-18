@@ -9,6 +9,7 @@ import {addModule, editModule, updateModule, deleteModule, setModules}
     from "./reducer";
 import {useSelector, useDispatch} from "react-redux";
 
+
 export default function Modules() {
     const {cid} = useParams();
 
