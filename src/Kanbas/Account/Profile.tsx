@@ -1,11 +1,19 @@
 import * as client from "./client";
-import {useState, useEffect} from "react";
-import {useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
 
 export default function Profile() {
-    const [profile, setProfile] = useState<any>({});
+    const [profile, setProfile] = useState<any>({
+        username: '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        dob: '',
+        email: '',
+        role: 'USER'
+    });
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -15,6 +23,17 @@ export default function Profile() {
             setProfile(account);
         } catch (err: any) {
             navigate("/Kanbas/Account/Signin");
+        }
+    };
+
+    const saveProfile = async () => {
+        try {
+            const updatedProfile = await client.updateProfile(profile);
+            setProfile(updatedProfile);
+            dispatch(setCurrentUser(updatedProfile));
+            alert("Profile updated successfully!");
+        } catch (err: any) {
+            alert("Failed to update profile");
         }
     };
 
@@ -34,26 +53,56 @@ export default function Profile() {
 
             {profile && (
                 <div>
-                    <input className="form-control mb-2" value={profile.username}
-                           onChange={(e) => setProfile({...profile, username: e.target.value})}/>
-                    <input className="form-control mb-2" value={profile.password}
-                           onChange={(e) => setProfile({...profile, password: e.target.value})}/>
-                    <input className="form-control mb-2" value={profile.firstName}
-                           onChange={(e) => setProfile({...profile, firstName: e.target.value})}/>
-                    <input className="form-control mb-2" value={profile.lastName}
-                           onChange={(e) => setProfile({...profile, lastName: e.target.value})}/>
-                    <input className="form-control mb-2" value={profile.dob}
-                           onChange={(e) => setProfile({...profile, dob: e.target.value})}
-                           type="date"/>
-                    <input className="form-control mb-2" value={profile.email}
-                           onChange={(e) => setProfile({...profile, email: e.target.value})}/>
-                    <select className="form-control mb-2"
-                            onChange={(e) => setProfile({...profile, role: e.target.value})}>
+                    <input
+                        className="form-control mb-2"
+                        value={profile.username}
+                        onChange={(e) => setProfile({...profile, username: e.target.value})}
+                        placeholder="Username"
+                    />
+                    <input
+                        className="form-control mb-2"
+                        value={profile.password}
+                        onChange={(e) => setProfile({...profile, password: e.target.value})}
+                        placeholder="Password"
+                        type="password"
+                    />
+                    <input
+                        className="form-control mb-2"
+                        value={profile.firstName}
+                        onChange={(e) => setProfile({...profile, firstName: e.target.value})}
+                        placeholder="First Name"
+                    />
+                    <input
+                        className="form-control mb-2"
+                        value={profile.lastName}
+                        onChange={(e) => setProfile({...profile, lastName: e.target.value})}
+                        placeholder="Last Name"
+                    />
+                    <input
+                        className="form-control mb-2"
+                        value={profile.dob}
+                        onChange={(e) => setProfile({...profile, dob: e.target.value})}
+                        type="date"
+                        placeholder="Date of Birth"
+                    />
+                    <input
+                        className="form-control mb-2"
+                        value={profile.email}
+                        onChange={(e) => setProfile({...profile, email: e.target.value})}
+                        placeholder="Email"
+                    />
+                    <select
+                        className="form-control mb-2"
+                        value={profile.role}
+                        onChange={(e) => setProfile({...profile, role: e.target.value})}>
                         <option value="USER">User</option>
                         <option value="ADMIN">Admin</option>
                         <option value="FACULTY">Faculty</option>
                         <option value="STUDENT">Student</option>
                     </select>
+                    <button onClick={saveProfile} className="btn btn-primary w-100 mb-2">
+                        Save
+                    </button>
                     <button onClick={signout} className="btn btn-danger w-100">
                         Sign out
                     </button>
